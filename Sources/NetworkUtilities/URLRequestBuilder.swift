@@ -86,8 +86,13 @@ public protocol URLRequestMethodBuilder {
 public protocol URLRequestMultipartFormBuilder {
     typealias FilePart = MultipartFormFilePart
     
+    @discardableResult
     func add(key: String, value: String)          -> URLRequestMultipartFormBuilder
+    
+    @discardableResult
     func add(key: String, value: Data)            -> URLRequestMultipartFormBuilder
+    
+    @discardableResult
     func add(key: String, file : FilePart) throws -> URLRequestMultipartFormBuilder
 }
 
@@ -122,6 +127,10 @@ public struct MultipartFormFilePart {
     public enum MimeType {
         case type(mimeType: String)
         case auto(withFallback: String = "application/octet-stream")
+        
+        public static var auto: MimeType {
+            .auto()
+        }
         
         fileprivate func value(forFile url: URL) -> String {
             switch self {
@@ -159,6 +168,7 @@ extension URLRequest {
             self.boundary = boundary
         }
         
+        @discardableResult
         func add(key: String, value: String) -> BodyBuilder.MultipartBuilder {
             data.append("--\(boundary)\(separator)")
             data.append(disposition(key) + separator)
@@ -168,6 +178,7 @@ extension URLRequest {
             return self as BodyBuilder.MultipartBuilder
         }
         
+        @discardableResult
         func add(key: String, value: Data) -> BodyBuilder.MultipartBuilder {
             data.append("--\(boundary)\(separator)")
             data.append(disposition(key) + separator)
@@ -177,6 +188,7 @@ extension URLRequest {
             return self as BodyBuilder.MultipartBuilder
         }
         
+        @discardableResult
         func add(key: String, file: FilePart) throws -> BodyBuilder.MultipartBuilder {
             data.append("--\(boundary)\(separator)")
             data.append(disposition(key) + "; filename=\"\(file.filename)\"" + separator)

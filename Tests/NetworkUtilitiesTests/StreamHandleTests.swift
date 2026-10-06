@@ -1,7 +1,6 @@
 import Foundation
 import Testing
 import NetworkUtilities
-import NetworkTestSupport
 
 @Suite("Stream handle · lifetime", .timeLimit(.minutes(1)))
 struct StreamHandleTests {
