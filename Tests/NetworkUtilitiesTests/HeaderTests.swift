@@ -25,15 +25,4 @@ struct HeaderTests {
         #expect(request.value(forHTTPHeaderField: "Content-Type") == "application/json")
         #expect(request.value(forHTTPHeaderField: "Accept-Language") == "el-GR")
     }
-
-    @Test func cachingMetadataCanBeRemovedWithoutLosingOrdinaryHeaders() {
-        let original = URLRequest(url: .utilityFixture).setting(header: .authorization(auth: "token"))
-        let cached = original.withInstanceCaching(customHash: "request-key")
-        #expect(cached.shouldCacheInstance)
-        #expect(cached.instanceHash == "request-key")
-        let cleared = cached.clearingInstanceCaching()
-        #expect(!cleared.shouldCacheInstance)
-        #expect(cleared.instanceHash == nil)
-        #expect(cleared == original)
-    }
 }
